@@ -154,7 +154,7 @@ class Player {
         }
     }
 
-    render(ctx, spriteSheet) {
+    /*render(ctx, spriteSheet) {
         if (!spriteSheet.complete) return;
 
         const animation = PLAYER_ANIMATIONS[this.state.currentAnimation];
@@ -181,6 +181,27 @@ class Player {
         );
 
         ctx.restore();
+    }*/
+    render(ctx) {
+        // Draw a simple colored rectangle instead of sprite
+        ctx.fillStyle = '#3498db'; // Blue color
+        ctx.fillRect(
+            this.state.position.x,
+            this.state.position.y,
+            this.state.width,
+            this.state.height
+        );
+
+        // Draw direction indicator
+        ctx.fillStyle = this.state.facing === 'right' ? '#e74c3c' : '#2ecc71';
+        ctx.fillRect(
+            this.state.facing === 'right'
+                ? this.state.position.x + this.state.width - 5
+                : this.state.position.x,
+            this.state.position.y + 5,
+            5,
+            5
+        );
     }
 }
 

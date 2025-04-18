@@ -1,4 +1,5 @@
-const PHYSICS = {
+// Add export to the PHYSICS constant
+export const PHYSICS = {
     GRAVITY: 0.8,
     MAX_DX: 6.5,       // Horizontal speed
     JUMP_FORCE: -14,

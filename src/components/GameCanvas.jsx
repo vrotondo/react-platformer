@@ -1,66 +1,82 @@
-// src/components/GameCanvas.jsx
+// src/components/GameCanvas.jsx (Simplified)
 import { useRef, useEffect } from 'react';
 import { useGameStore } from '../game/store';
-import GameManager from '../game/GameManager';
 import GameOverScreen from './GameOverScreen';
 import LevelCompleteScreen from './LevelCompleteScreen';
 
 const GameCanvas = () => {
     const canvasRef = useRef(null);
-    const gameManagerRef = useRef(null);
     const { isPaused, isGameOver, health, score, currentLevel, levelCompleted } = useGameStore();
 
     // Initialize the game
     useEffect(() => {
         const canvas = canvasRef.current;
-        if (!canvas) return;
+        if (!canvas) {
+            console.error("Canvas element not found!");
+            return;
+        }
 
         // Set canvas size
         canvas.width = 800;
         canvas.height = 480;
 
-        // Create game manager
-        gameManagerRef.current = new GameManager(canvas);
+        const ctx = canvas.getContext('2d');
 
-        // Handle resize
-        const handleResize = () => {
-            // Optionally adjust canvas size based on window size
-            // For now, we'll keep it fixed at 800x480
+        // Simple animation to show the canvas is working
+        let frameCount = 0;
+
+        const render = () => {
+            frameCount++;
+
+            // Skip if paused
+            if (isPaused) {
+                requestAnimationFrame(render);
+                return;
+            }
+
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw background
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, '#87CEEB');
+            gradient.addColorStop(1, '#E0F7FA');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw ground
+            ctx.fillStyle = '#7a6c5d';
+            ctx.fillRect(0, 350, 800, 130);
+
+            // Draw player (animated bouncing rectangle)
+            const bounce = Math.sin(frameCount * 0.05) * 10;
+            ctx.fillStyle = '#3498db';
+            ctx.fillRect(100, 300 + bounce, 32, 48);
+
+            // Draw platform
+            ctx.fillStyle = '#7a6c5d';
+            ctx.fillRect(300, 250, 200, 30);
+
+            // Draw exit portal
+            ctx.fillStyle = '#44cc44';
+            ctx.fillRect(700, 300, 48, 48);
+
+            // Draw info text
+            ctx.fillStyle = 'white';
+            ctx.font = '16px Arial';
+            ctx.fillText('Simple Canvas Demo - Sprites Not Loaded', 20, 30);
+            ctx.fillText('Use arrow keys to move & space to jump', 20, 50);
+
+            requestAnimationFrame(render);
         };
 
-        window.addEventListener('resize', handleResize);
+        // Start render loop
+        requestAnimationFrame(render);
 
-        return () => {
-            window.removeEventListener('resize', handleResize);
-            // Clean up game resources if needed
-        };
-    }, []);
+        // Log success
+        console.log("Canvas initialized successfully!");
 
-    // Handle pause state changes
-    useEffect(() => {
-        if (!gameManagerRef.current) return;
-
-        if (isPaused) {
-            gameManagerRef.current.pauseGame();
-        } else {
-            gameManagerRef.current.resumeGame();
-        }
     }, [isPaused]);
-
-    // Handle level changes
-    useEffect(() => {
-        if (!gameManagerRef.current || !currentLevel) return;
-
-        // Load the current level
-        gameManagerRef.current.loadLevel(currentLevel);
-    }, [currentLevel]);
-
-    // Handle game over
-    useEffect(() => {
-        if (!gameManagerRef.current || !isGameOver) return;
-
-        gameManagerRef.current.gameOver();
-    }, [isGameOver]);
 
     return (
         <div className="game-canvas-container">

@@ -257,7 +257,8 @@ class GameManager {
 
         // Render player
         if (player) {
-            player.render(this.ctx, playerSpriteImg);
+            /*player.render(this.ctx, playerSpriteImg);*/
+            player.render(this.ctx);
         }
 
         // Render enemies

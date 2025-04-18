@@ -155,7 +155,7 @@ export default Level;
 
 // Load sprites
 const enemySprite = new Image();
-enemySprite.src = '../assets/sprites/enemy-sheet.png';
+enemySprite.src = '/src/assets/sprites/enemy-sheet.png';
 
 const collectibleSprite = new Image();
-collectibleSprite.src = '../assets/sprites/collectibles-sheet.png';
+collectibleSprite.src = '/src/assets/sprites/collectibles-sheet.png';
