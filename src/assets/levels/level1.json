@@ -1,0 +1,37 @@
+// level1.json
+{
+    "tileSize": 48,
+    "layers": [
+        {
+            "data": [
+                0,
+                0,
+                0,
+                1,
+                1,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                1,
+                1,
+                0,
+                0,
+                0,
+                1,
+                1,
+                // ... grid data
+            ],
+            "tileset": {
+                0: { type: "air"
+                },
+                1: { type: "ground", color: "#7a6c5d"
+                },
+                2: { type: "hazard", damage: 1
+                }
+            }
+        }
+    ]
+}
