@@ -1,23 +1,35 @@
 // src/App.jsx
+import { useState, useEffect } from 'react';
 import GameCanvas from './components/GameCanvas';
-import Level from './components/Level';
-import Player from './components/Player';
 import HUD from './components/HUD';
 import PauseMenu from './components/PauseMenu';
-import levelData from './assets/levels/level1.json';
+import { useGameStore } from './game/store';
+import './App.css';
 
 function App() {
-  const [playerHealth, setPlayerHealth] = useState(100);
-  const [gameScore, setGameScore] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
+  const { health, score, isPaused, setIsPaused } = useGameStore();
+
+  // Handle keyboard events for pausing the game
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setIsPaused(!isPaused);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isPaused, setIsPaused]);
 
   return (
-    <GameCanvas>
-      <Level levelData={levelData}>
-        <Player spawnPoint={levelData.spawn} />
-      </Level>
-      <HUD health={playerHealth} score={gameScore} />
-      <PauseMenu isOpen={isPaused} />
-    </GameCanvas>
+    <div className="game-container">
+      <GameCanvas />
+      <HUD health={health} score={score} />
+      {isPaused && <PauseMenu />}
+    </div>
   );
 }
+
+export default App;
